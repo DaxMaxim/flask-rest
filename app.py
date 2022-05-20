@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_restful import Resource, Api, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='./templates')
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite.db'
 db = SQLAlchemy(app)
@@ -14,7 +14,9 @@ class TodoModel(db.Model):
     summary = db.Column(db.String(500))
 
 #db.create_all()
-
+@app.route('/')
+def start():
+    return render_template('index.html')
 
 task_post_args = reqparse.RequestParser()
 task_post_args.add_argument("task", type=str, help= "Task is required" ,required=True)
